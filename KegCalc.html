@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+    <link rel="apple-touch-icon" sizes="152×152" href="/images/BEERTOWN/mug.png"/>
+ 
+<title>KEG CALCULATOR</title>
+
+<link rel = "icon" href = "/images/BEERTOWN/mug.png" type="image/x-icon">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('/images/BEERTOWN/subwaytile.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.button {
+  background-color: #D3D3D3;
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 8px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button2 {
+  background-color: #D3D3D3;
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 8px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button3 {
+  background-color: #D3D3D3;
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 13px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button5 {
+  background-color: #D3D3D3;
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 13px 23px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button4 {
+  background-color: #D3D3D3;
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 8px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button6 {
+  background-color: #F44336;
+  border: 3px solid black;
+  color: white;
+  padding: 12px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 4px 4px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type=text2] {
+  width: 100%;
+
+  margin: 2px 0;
+  box-sizing: border-box;
+  border: none;
+  background-color: #000000;
+  color: white;
+}
+
+table {
+  border-collapse: collapse;
+  border-bottom: 3pt solid black;
+}
+
+td.thicker {
+  font-weight: 900;
+}
+
+</style>
+
+  <SCRIPT>
+           
+            function Calculate(){
+                var a=parseFloat(document.getElementById("txta").value);
+                var b=a-31;
+                document.getElementById("txtb").value=""+b;
+            }
+            
+            function Calculate2(){
+                var c=parseFloat(document.getElementById("txtc").value);
+                var d=c-28;
+                document.getElementById("txtd").value=""+d;
+            }
+            function Calculate3(){
+                var e=parseFloat(document.getElementById("txte").value);
+                var f=e-18;
+                document.getElementById("txtf").value=""+f;
+            }
+            function Calculate4(){
+                var g=parseFloat(document.getElementById("txtg").value);
+                var h=g-10;
+                document.getElementById("txth").value=""+h;
+            }
+            function Calculate5(){
+                var e=parseFloat(document.getElementById("txte").value);
+                var f=e-22;
+                document.getElementById("txtf").value=""+f;
+            }
+
+        </SCRIPT>
+</head>
+<body>
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-black">
+
+  <div class="w3-display-middle">
+      <div class="w3-container">
+
+
+
+        <table>
+            <tr>
+                <td>
+                    <label><b>58L:</b></label>
+                </td>
+                <td>
+                    <input type="text" name="txta" id="txta" />
+                    </td>
+                   </tr>
+             <tr>
+                <td>
+                    <label style="color:red"><b>LBS</b></label>
+                </td>
+                <td class="thicker">
+                    <input type="text2" name="txtb" id="txtb" readonly />
+                </td>
+                
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input type="button" class="button" value="Calculate" onclick="Calculate()" />
+                   </td>
+            </tr>
+            
+        </table>
+    
+     <table>
+            <tr>
+                <td>
+                    <label><b>50L:</b></label>
+                </td>
+                <td>
+                    <input type="text" name="txtc" id="txtc" />
+                </td>
+                <td rowspan="2">
+                    <input type="button" class="button6" value="Clear" onclick="document.getElementById('txta').value = ''; document.getElementById('txtb').value = ''; document.getElementById('txtc').value = ''; document.getElementById('txtd').value = ''; document.getElementById('txte').value = ''; document.getElementById('txtf').value = ''; document.getElementById('txtg').value = ''; document.getElementById('txth').value = ''">
+                    </td>
+            </tr>
+             <tr>
+                <td>
+                    <label style="color:red"><b>LBS</b></label>
+                </td>
+                
+                <td class="thicker">
+                    <input type="text2" name="txtd" id="txtd" readonly />
+                 </td>
+                  
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input type="button" class="button2" value="Calculate" onclick="Calculate2()" />
+                </td>
+               </tr>
+            
+        </table>
+         
+            <table>
+            <tr>
+                <td>
+                    <label><b>30L:</b></label>
+                </td>
+                <td>
+                    <input type="text" name="txte" id="txte" />
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    <label style="color:red"><b>LBS</b></label>
+                </td>
+                <td class="thicker">
+                    <input type="text2" name="txtf" id="txtf" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input type="button" class="button3" value="Calculate" onclick="Calculate3()" />
+                     <input type="button" class="button5" value="Euro" onclick="Calculate5()" />
+                </td>
+            </tr>
+            
+        </table>
+     <table>
+            <tr>
+                <td>
+                    <label><b>20L:</b></label>
+                </td>
+                <td>
+                    <input type="text" name="txtg" id="txtg" />
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    <label style="color:red"><b>LBS</b></label>
+                </td>
+                <td class="thicker">
+                    <input type="text2" name="txth" id="txth" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input type="button" class="button4" value="Calculate" onclick="Calculate4()" />
+                </td>
+            </tr>
+           
+        </table>
+
+  </div>
+</div>
+</div>
+
+</body>
+</html>
