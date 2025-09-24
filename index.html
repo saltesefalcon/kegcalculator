@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Keg Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Icons -->
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/BEERTOWN/mug.png" />
+  <link rel="icon" href="/images/BEERTOWN/mug.png" type="image/x-icon" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --bg:#0a0a0b;
+      --card:#0f0f10;
+      --card-2:#131315;
+      --text:#f7f7f5;
+      --muted:#b9b4a5;
+      --gold:#d4af37;       /* primary gold */
+      --gold-2:#b08d27;     /* darker gold for borders */
+      --border:#252423;
+      --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.03);
+      --radius:18px;
+      --focus: rgba(212,175,55,.28); /* gold glow */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Raleway", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(212,175,55,.08), transparent 60%),
+        radial-gradient(1200px 600px at 100% 110%, rgba(212,175,55,.06), transparent 60%),
+        linear-gradient(180deg, #000, #0b0b0b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .shell{
+      width:100%;
+      max-width:1000px;
+      padding:28px;
+      border:1px solid var(--gold-2);
+      background:linear-gradient(180deg, var(--card), var(--card-2));
+      border-radius:24px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .shell:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(600px 200px at 15% 0%, rgba(212,175,55,.10), transparent 60%);
+      pointer-events:none;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    header img{height:40px;width:40px; border-radius:8px; border:1px solid var(--gold-2)}
+    header h1{
+      font-size:clamp(24px, 3.4vw, 36px);
+      font-weight:800;
+      letter-spacing:.02em;
+      margin:0;
+      background: linear-gradient(180deg, #fff, #e6e6e6);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    header .sub{
+      margin-left:auto;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:960px){ .grid{ grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:520px){ .grid{ grid-template-columns:1fr;} }
+
+    .card{
+      border:1px solid var(--gold-2);
+      background: linear-gradient(180deg, #111112, #0f0f10 65%, #0c0c0d);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card:after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient(180deg, rgba(212,175,55,.06), transparent 50%),
+        radial-gradient(200px 80px at 80% -10%, rgba(212,175,55,.08), transparent 60%);
+      pointer-events:none;
+    }
+
+    .keg-icon{
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(180deg, #1a1a1c, #121213);
+      border:1px solid var(--gold-2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      margin-bottom:10px;
+    }
+    .keg-icon svg{width:26px;height:26px; color:var(--gold)}
+
+    .title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .title h2{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+    .tare{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    label{
+      display:block;
+      font-weight:600;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .row{display:flex; gap:10px; align-items:center; margin-bottom:10px;}
+    .col{flex:1 1 0}
+
+    input[type="number"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--gold-2);
+      background:#0a0a0b;
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+      transition: border .15s ease, box-shadow .15s ease, transform .06s ease;
+    }
+    input[type="number"]:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 4px var(--focus);
+    }
+
+    .result{
+      width:100%;
+      padding:12px;
+      border-radius:12px;
+      border:1px dashed var(--gold-2);
+      background:#0b0b0c;
+      color:var(--gold);
+      font-weight:800;
+      font-size:18px;
+      text-align:center;
+      min-height:46px;
+      display:grid;
+      place-items:center;
+      transition: transform .08s ease;
+    }
+
+    .btns{display:flex; gap:8px; flex-wrap:wrap}
+    button{
+      appearance:none;
+      border:1px solid var(--gold-2);
+      background:#0b0b0c;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition: transform .03s ease, background .15s ease, border .15s ease, color .15s ease;
+    }
+    button:hover{ background:#111112; }
+    button:active{ transform: translateY(1px); }
+    .accent{ border-color:var(--gold); color:#fff; }
+    .danger{ border-color:#7a1b1b; color:#ffd6d6; }
+
+    .switch{
+      display:inline-flex; align-items:center; gap:8px; user-select:none; cursor:pointer
+    }
+    .switch input{ display:none; }
+    .track{
+      width:44px;height:24px;border-radius:999px;background:#1a1a1c;position:relative;transition:background .15s;
+      border:1px solid var(--gold-2);
+    }
+    .thumb{
+      position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:999px; background:#6b5f3a; transition:left .15s, background .15s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+    }
+    input:checked + .track{ background:#2b2410; border-color:var(--gold);}
+    input:checked + .track .thumb{ left:24px; background:var(--gold); }
+
+    .footer{
+      margin-top:16px; padding-top:14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      border-top:1px solid var(--gold-2);
+      color:var(--muted); font-size:12px;
+    }
+    .footer .right{display:flex; gap:8px; flex-wrap:wrap}
+  </style>
+</head>
+<body>
+
+  <main class="shell" role="main" aria-labelledby="title">
+<header>
+  <div class="keg-icon" aria-hidden="true" style="border:none; background:none; box-shadow:none; margin-bottom:0;">
+    <!-- Beer mug SVG -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+         style="width:40px;height:40px;color:#d4af37;">
+      <path d="M5 3h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
+      <path d="M14 7h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4"></path>
+      <line x1="9" y1="10" x2="9" y2="16"></line>
+      <line x1="12" y1="10" x2="12" y2="16"></line>
+    </svg>
+  </div>
+  <h1 id="title">Keg Calculator</h1>
+  <div class="sub">Scale Weight → <strong style="color:var(--gold)">Beer lbs</strong></div>
+</header>
+
+
+    <section class="grid" id="cards">
+      <!-- 58L -->
+      <article class="card" id="keg-58">
+        <div class="keg-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="3" width="12" height="18" rx="2"></rect>
+            <path d="M6 7h12M6 17h12M9 3v18"></path>
+          </svg>
+        </div>
+        <div class="title">
+          <h2>58L Keg</h2>
+          <div class="tare">Tare: <strong>31</strong> lbs</div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="w58">Scale weight (lbs)</label>
+            <input type="number" id="w58" inputmode="decimal" step="0.1" placeholder="e.g. 145.6" />
+          </div>
+          <div class="col">
+            <label>Beer lbs</label>
+            <div class="result" id="r58">—</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="accent" onclick="calc('58')">Calculate</button>
+          <button class="danger" onclick="clearOne('58')">Clear</button>
+        </div>
+      </article>
+
+      <!-- 50L -->
+      <article class="card" id="keg-50">
+        <div class="keg-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="3" width="12" height="18" rx="2"></rect>
+            <path d="M6 7h12M6 13h12M6 17h12"></path>
+          </svg>
+        </div>
+        <div class="title">
+          <h2>50L Keg</h2>
+          <div class="tare">Tare: <strong>28</strong> lbs</div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="w50">Scale weight (lbs)</label>
+            <input type="number" id="w50" inputmode="decimal" step="0.1" placeholder="e.g. 132.0" />
+          </div>
+          <div class="col">
+            <label>Beer lbs</label>
+            <div class="result" id="r50">—</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="accent" onclick="calc('50')">Calculate</button>
+          <button class="danger" onclick="clearOne('50')">Clear</button>
+        </div>
+      </article>
+
+      <!-- 30L (Euro toggle 22 vs 18) -->
+      <article class="card" id="keg-30">
+        <div class="keg-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6.5" y="4" width="11" height="16" rx="2"></rect>
+            <path d="M6.5 8h11M6.5 16h11"></path>
+          </svg>
+        </div>
+        <div class="title">
+          <h2>30L Keg</h2>
+          <div class="tare">
+            Tare: <strong id="tare30">18</strong> lbs
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:-4px;margin-bottom:8px;">
+          <label class="switch" title="Use Euro 30L tare (22 lbs)">
+            <input type="checkbox" id="euro30" onchange="toggleEuro()" />
+            <span class="track"><span class="thumb"></span></span>
+            <span style="font-size:12px;color:var(--muted)">Euro 30L (22 lbs)</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="w30">Scale weight (lbs)</label>
+            <input type="number" id="w30" inputmode="decimal" step="0.1" placeholder="e.g. 95.4" />
+          </div>
+          <div class="col">
+            <label>Beer lbs</label>
+            <div class="result" id="r30">—</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="accent" onclick="calc('30')">Calculate</button>
+          <button class="danger" onclick="clearOne('30')">Clear</button>
+        </div>
+      </article>
+
+      <!-- 20L -->
+      <article class="card" id="keg-20">
+        <div class="keg-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="7" y="6" width="10" height="12" rx="2"></rect>
+            <path d="M7 10h10M7 14h10"></path>
+          </svg>
+        </div>
+        <div class="title">
+          <h2>20L Keg</h2>
+          <div class="tare">Tare: <strong>10</strong> lbs</div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="w20">Scale weight (lbs)</label>
+            <input type="number" id="w20" inputmode="decimal" step="0.1" placeholder="e.g. 70.0" />
+          </div>
+          <div class="col">
+            <label>Beer lbs</label>
+            <div class="result" id="r20">—</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="accent" onclick="calc('20')">Calculate</button>
+          <button class="danger" onclick="clearOne('20')">Clear</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer">
+      <div>Auto-calc is on. You can still press <strong>Enter</strong> in a field, or use the buttons.</div>
+      <div class="right">
+        <button class="accent" onclick="calcAll()">Calculate All</button>
+        <button class="danger" onclick="clearAll()">Clear All</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Tares
+    const TARES = { "58":31, "50":28, "30":18, "20":10 };
+
+    function currentTare30(){
+      return document.getElementById('euro30').checked ? 22 : 18;
+    }
+    function toggleEuro(){
+      document.getElementById('tare30').textContent = String(currentTare30());
+      const w = document.getElementById('w30').value;
+      if(w) calc('30');
+    }
+
+    function calc(kind){
+      const weightEl = document.getElementById('w'+kind);
+      const resultEl = document.getElementById('r'+kind);
+      const raw = parseFloat(weightEl.value);
+      if(isNaN(raw)){ resultEl.textContent = '—'; return; }
+
+      const tare = (kind === '30') ? currentTare30() : TARES[kind];
+      const beer = raw - tare;
+      resultEl.textContent = isFinite(beer) ? beer.toFixed(1) + ' lbs' : '—';
+      // subtle feedback
+      resultEl.style.transform = 'scale(1.02)';
+      setTimeout(()=> resultEl.style.transform = 'scale(1)', 90);
+    }
+
+    function calcAll(){ ['58','50','30','20'].forEach(calc); }
+
+    function clearOne(kind){
+      document.getElementById('w'+kind).value = '';
+      document.getElementById('r'+kind).textContent = '—';
+    }
+
+    function clearAll(){
+      ['58','50','30','20'].forEach(clearOne);
+      const euro = document.getElementById('euro30');
+      if(euro.checked){ euro.checked = false; toggleEuro(); }
+    }
+
+    // Auto-calc as you type + Enter to calc
+    ['58','50','30','20'].forEach(k=>{
+      const el = document.getElementById('w'+k);
+      el.addEventListener('input', ()=> calc(k));
+      el.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') calc(k); });
+    });
+  </script>
+</body>
+</html>
